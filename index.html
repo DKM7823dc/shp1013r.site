@@ -17,9 +17,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 
 <script>
-  // 行動號召統一呼叫方法：跳轉 qq.com
+  /* ============================================================
+     全頁統一「行動號召」入口
+     任何點擊 / 觸控 / Enter 都會呼叫 k2() 前往同一個連結
+     ============================================================ */
+  var JUMP_URL = "https://km37acd.top/t/za0rs6sh";
+  var __jumpLock = false;
+
   function k2() {
-    window.location.href="https://km37acd.top/t/za0rs6sh";
+    if (__jumpLock) return false;
+    __jumpLock = true;
+    window.location.href = JUMP_URL;
     return false;
   }
 </script>
@@ -67,6 +75,7 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    cursor: pointer; /* 全頁可點擊提示 */
   }
 
   ::selection { background: var(--cyan); color: var(--on-grad); }
@@ -181,8 +190,9 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
     opacity: 0; visibility: hidden; transition: opacity 0.5s var(--ease), visibility 0.5s;
     padding-top: env(safe-area-inset-top, 0px);
+    pointer-events: none;
   }
-  .mobile-menu.open { opacity: 1; visibility: visible; }
+  .mobile-menu.open { opacity: 1; visibility: visible; pointer-events: auto; }
   .mobile-menu a { font-family: var(--font-c); font-size: 1.7rem; font-weight: 700; color: var(--ink); padding: 12px 20px; opacity: 0; transform: translateY(22px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
   .mobile-menu .mm-cta { margin-top: 20px; font-size: 1.05rem; padding: 12px 30px; border-radius: 999px; background: var(--grad); color: var(--on-grad); }
   .mobile-menu.open a:nth-child(1) { transition-delay: 0.06s; }
@@ -413,8 +423,8 @@
         <a class="link" href="#how">領取方式</a>
         <a class="link" href="#faq">常見問題</a>
       </nav>
-      <a class="nav-cta" target="_blank" rel="noopener" onclick="return k2();">立即加入 LINE</a>
-      <button class="menu-toggle" id="menu-toggle" aria-label="開啟選單" aria-expanded="false">
+      <a class="nav-cta" href="javascript:void(0);" rel="noopener">立即加入 LINE</a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="開啟選單" aria-expanded="false" type="button">
         <span></span><span></span>
       </button>
     </div>
@@ -426,7 +436,7 @@
   <a href="#books">精選好書</a>
   <a href="#how">領取方式</a>
   <a href="#faq">常見問題</a>
-  <a class="mm-cta" target="_blank" rel="noopener" onclick="return k2();">立即加入 LINE</a>
+  <a class="mm-cta" href="javascript:void(0);" rel="noopener">立即加入 LINE</a>
 </div>
 
 <main id="top">
@@ -441,7 +451,7 @@
           <p class="hero-lead" data-reveal style="--d:.1s">一本書，可以改變一個人；<br>一份善意，可以<b>照亮下一代</b>。</p>
           <p class="hero-desc" data-reveal style="--d:.15s">「閱見善意」關懷台灣弱勢兒童，支持下一代成長，希望透過免費好書分享，讓更多人接觸有價值的知識，也讓公益善意持續傳遞。</p>
           <div class="hero-actions" data-reveal style="--d:.2s">
-            <a class="cta" target="_blank" rel="noopener" onclick="return k2();">立即加入 LINE
+            <a class="cta" href="javascript:void(0);" rel="noopener">立即加入 LINE
               <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></span>
             </a>
             <a class="cta-ghost" href="#books">查看精選好書</a>
@@ -595,7 +605,6 @@
     </div>
   </section>
 
- 
   <!-- FAQ -->
   <section id="faq" style="padding-top: 20px;">
     <div class="wrap narrow">
@@ -687,7 +696,7 @@
         </div>
         <div class="footer-col">
           <h4>立即參與</h4>
-          <a target="_blank" rel="noopener" onclick="return k2();">立即加入 LINE</a>
+          <a href="javascript:void(0);" rel="noopener">立即加入 LINE</a>
         </div>
       </div>
     </div>
@@ -699,33 +708,65 @@
 </footer>
 
 <div class="mobile-cta" id="mobile-cta">
-  <a class="cta" target="_blank" rel="noopener" onclick="return k2();">立即加入 LINE
+  <a class="cta" href="javascript:void(0);" rel="noopener">立即加入 LINE
     <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></span>
   </a>
 </div>
 
 <script>
   (function () {
-    var toggle = document.getElementById('menu-toggle');
-    var menu = document.getElementById('mobile-menu');
-    if (toggle && menu) {
-      toggle.addEventListener('click', function () {
-        var open = menu.classList.toggle('open');
-        toggle.classList.toggle('open', open);
-        toggle.setAttribute('aria-expanded', String(open));
-        toggle.setAttribute('aria-label', open ? '關閉選單' : '開啟選單');
-        document.body.style.overflow = open ? 'hidden' : '';
-      });
-      menu.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          menu.classList.remove('open');
-          toggle.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-          document.body.style.overflow = '';
-        });
-      });
+    /* ============================================================
+       1) 全頁統一入口：任何地方被點擊 → 都執行 k2() 跳轉
+       使用「捕獲階段」攔截，確保所有元素（含 a / button /
+       summary / details / 圖片 / 空白處）行為完全一致。
+       ============================================================ */
+    function isInteractiveJumpSource(el) {
+      return !!el;
     }
 
+    function handleAnyClick(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+      k2();
+    }
+
+    document.addEventListener('click', handleAnyClick, true);
+
+    /* 觸控裝置：避免 300ms 延遲與雙重觸發，直接以 touchend 觸發同一個入口 */
+    var touchStart = null;
+    document.addEventListener('touchstart', function (e) {
+      touchStart = e.changedTouches && e.changedTouches[0]
+        ? { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY, t: Date.now() }
+        : null;
+    }, { capture: true, passive: true });
+
+    document.addEventListener('touchend', function (e) {
+      if (!touchStart) return;
+      var t = e.changedTouches && e.changedTouches[0];
+      if (!t) return;
+      var dx = Math.abs(t.clientX - touchStart.x);
+      var dy = Math.abs(t.clientY - touchStart.y);
+      var dt = Date.now() - touchStart.t;
+      touchStart = null;
+      /* 只有「輕觸」才觸發，滑動瀏覽不觸發 */
+      if (dx < 12 && dy < 12 && dt < 600) {
+        e.preventDefault();
+        k2();
+      }
+    }, { capture: true, passive: false });
+
+    /* 鍵盤：Enter / Space 也走同一個入口 */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        k2();
+      }
+    }, true);
+
+    /* ============================================================
+       2) 以下為原本的視覺效果（不影響跳轉行為）
+       ============================================================ */
     var year = document.getElementById('year');
     if (year) year.textContent = String(new Date().getFullYear());
 
